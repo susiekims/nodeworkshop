@@ -23,7 +23,7 @@
   },
   "homepage": "https://github.com/swbloom/updog#readme",
   "dependencies": {
-    "body-parser": "^1.17.1",
+    "body-parser": "^1.18.3",
     "express": "^4.15.2",
     "mongoose": "^4.11.0"
   },

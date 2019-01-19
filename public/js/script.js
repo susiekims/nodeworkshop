@@ -31,6 +31,7 @@ updog.displayDogs = (dogs) => {
 	$('#dogos').empty();
 	dogs.forEach((dog) => {
 		const $container = $("<div>").addClass('dogo');
+		const $deleteButton = $('<button>').text('Delete dog').addClass('delete-button').data('id', dog._id);
 		const $img = $('<img>').attr('src',dog.photo);
 		const $name = $('<h3>').text(dog.name);
 		const $desc = $('<p>').text(dog.description);
@@ -38,10 +39,18 @@ updog.displayDogs = (dogs) => {
 		const $score = $('<p>').text(dog.score).addClass('score');
 		const $thumb = $('<p>').text('👍').addClass('updog').data('id',dog._id);
 		$scoreContainer.append($score,$thumb);
-		$container.append($img,$name,$desc,$scoreContainer);
+		$container.append($img,$name,$desc,$scoreContainer, $deleteButton);
 		$('#dogos').append($container);
 	})
 };
+
+updog.deleteDog = (id) => {
+	return $.ajax({
+		url: `/api/pets/${id}`,
+		method: 'DELETE',
+		dataType: 'json'
+	})
+}
 
 updog.events = () => {
 	$('.add-dogo form').on('submit',(e) => {
@@ -67,6 +76,13 @@ updog.events = () => {
 			.then(updog.getDogs)
 			.then(updog.displayDogs)
 	});
+
+	$('#dogos').on('click', '.delete-button', function() {
+		const id = $(this).data('id')
+		updog.deleteDog(id)
+			.then(updog.getDogs)
+			.then(updog.displayDogs);
+	})
 };
 
 updog.init = () => {
